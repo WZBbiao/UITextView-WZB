@@ -3,12 +3,15 @@
 
 #####1、效果:
 功能一、让系统TextView自带placeholder属性
+
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textView.gif?raw=true)
 
 功能二、自动改变高度，类似聊天输入框
+
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewHeightChange.gif?raw=true)
 
 功能三、支持输入图片
+
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
 
 
@@ -25,6 +28,7 @@
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textView-demo-1.png?raw=true)
 
 >如果想要计算高度，只需要调用这个方法即可，你需要在block回调里手动更改textView的高度
+
 ```
 /* 自动高度的方法，maxHeight：最大高度， textHeightDidChanged：高度改变的时候调用 */
 - (void)autoHeightWithMaxHeight:(CGFloat)maxHeight textViewHeightDidChanged:(textViewHeightDidChangedBlock)textViewHeightDidChanged;
@@ -35,6 +39,7 @@
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewHeightChange.gif?raw=true)
 
 >插入图片的方法如下：
+
 ```
 
 /* 添加一张图片 image:要添加的图片 */
@@ -49,6 +54,7 @@
 /* 插入一张图片 image:要添加的图片 multiple:放大／缩小的倍数 index:插入的位置 */
 - (void)insertImage:(UIImage *)image multiple:(CGFloat)multiple index:(NSInteger)index;
 ```
+
 注释写的很清楚，效果如下：
 
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
@@ -56,6 +62,7 @@
  #####3、实现大致原理：
 
 >使用runtime为textView添加如下属性
+
 ```
 // 占位文字
 static const void *WZBPlaceholderViewKey = &WZBPlaceholderViewKey;
@@ -72,6 +79,7 @@ objc_setAssociatedObject(self, WZBTextViewHeightDidChangedBlockKey, textViewHeig
 objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 ```
 >监听
+
 ```
     // 监听文字改变
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextChange) name:UITextViewTextDidChangeNotification object:self];
@@ -82,7 +90,9 @@ objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_AS
        [self addObserver:self forKeyPath:property options:NSKeyValueObservingOptionNew context:nil];
     }
 ```
+
 >当文字发生变化的时候
+
 ```
 - (void)textViewTextChange {
     self.placeholderView.hidden = (self.attributedText.length > 0 && self.attributedText);
@@ -101,7 +111,9 @@ objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_AS
     }
 }
 ```
+
 >添加图片是用的NSTextAttachment
+
 ```
 - (void)addImage:(UIImage *)image size:(CGSize)size index:(NSInteger)index multiple:(CGFloat)multiple {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
