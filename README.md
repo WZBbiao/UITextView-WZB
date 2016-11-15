@@ -4,10 +4,13 @@
 #####1、效果:
 功能一、让系统TextView自带placeholder属性
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textView.gif?raw=true)
+
 功能二、自动改变高度，类似聊天输入框
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewHeightChange.gif?raw=true)
+
 功能三、支持输入图片
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
+
 
  #####2、使用方法：
 将UITextView+WZB.h和UITextView+WZB.m拖入工程
@@ -19,7 +22,7 @@
     [self.view addSubview:textView];
 ```
 
-![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
+![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textView-demo-1.png?raw=true)
 
 >如果想要计算高度，只需要调用这个方法即可，你需要在block回调里手动更改textView的高度
 ```
