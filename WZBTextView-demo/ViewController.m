@@ -59,17 +59,12 @@
 
 // 当得到照片后，调用该方法
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-    // 判断获取类型：图片
     if ([mediaType isEqualToString:(NSString *)kUTTypeImage]){
         UIImage *theImage = nil;
-        // 判断，图片是否允许修改
         if ([picker allowsEditing]){
-            //获取用户编辑之后的图像
             theImage = [info objectForKey:UIImagePickerControllerEditedImage];
         } else {
-            // 照片的元数据参数
             theImage = [info objectForKey:UIImagePickerControllerOriginalImage];
         }
         if (theImage) {

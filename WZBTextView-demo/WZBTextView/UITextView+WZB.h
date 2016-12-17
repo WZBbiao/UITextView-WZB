@@ -13,7 +13,7 @@ typedef void(^textViewHeightDidChangedBlock)(CGFloat currentTextViewHeight);
 @interface UITextView (WZB)
 
 /* 占位文字 */
-@property (nonatomic, copy) IB_DESIGNABLE NSString *placeholder;
+@property (nonatomic, copy) NSString *placeholder;
 
 /* 占位文字颜色 */
 @property (nonatomic, strong) UIColor *placeholderColor;
