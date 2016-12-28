@@ -12,14 +12,26 @@
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (nonatomic, strong) UITextView *tView;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self test1];
+}
+
+- (void)test1 {
+    self.textView.hidden = NO;
     self.textView.placeholder = @"i love you";
     self.textView.maxHeight = 100.05;
+}
+
+- (void)test2 {
+    self.textView.hidden = YES;
+    
     UITextView *textView = [[UITextView alloc] initWithFrame:(CGRect){0, 0, 200, 30}];
     [self.view addSubview:textView];
     textView.center = self.view.center;
@@ -35,7 +47,7 @@
         }];
     }];
     self.tView = textView;
-    UIButton *button = [[UIButton alloc] initWithFrame:(CGRect){20, 30, 50, 25}];
+    UIButton *button = [[UIButton alloc] initWithFrame:(CGRect){20, 30, 100, 25}];
     [self.view addSubview:button];
     [button setTitle:@"添加图片" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
