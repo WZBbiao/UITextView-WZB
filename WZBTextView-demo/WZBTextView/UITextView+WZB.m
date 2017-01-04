@@ -24,6 +24,31 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
 
 @implementation UITextView (WZB)
 
+#pragma mark - Swizzle Dealloc
+
++ (void)load {
+    // 交换dealoc
+    Method dealoc = class_getInstanceMethod(self.class, NSSelectorFromString(@"dealloc"));
+    Method myDealoc = class_getInstanceMethod(self.class, @selector(myDealoc));
+    method_exchangeImplementations(dealoc, myDealoc);
+}
+
+- (void)myDealoc {
+    // 移除监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
+    
+    // 如果有值才去调用，这步很重要
+    if (placeholderView) {
+        NSArray *propertys = @[@"frame", @"bounds", @"font", @"text", @"textAlignment", @"textContainerInset"];
+        for (NSString *property in propertys) {
+            [self removeObserver:self forKeyPath:property];
+        }
+    }
+    [self myDealoc];
+}
+
 - (UITextView *)placeholderView {
     
     // 为了让占位文字和textView的实际文字位置能够完全一致，这里用UITextView
@@ -231,21 +256,6 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
     [self textViewTextChange];
     [self refreshPlaceholderView];
     
-}
-
-- (void)dealloc {
-    // 移除监听
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
-    
-    // 如果有值才去调用，这步很重要
-    if (placeholderView) {
-        NSArray *propertys = @[@"frame", @"bounds", @"font", @"text", @"textAlignment", @"textContainerInset"];
-        for (NSString *property in propertys) {
-            [self removeObserver:self forKeyPath:property];
-        }
-    }
 }
 
 @end
