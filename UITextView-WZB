@@ -1,0 +1,16 @@
+
+Pod::Spec.new do |s|
+s.name = 'UITextView-WZB'
+s.version = '1.0.0'
+s.summary = '一个强大的UITextView分类，三大功能，让系统TextView自带占位符属性，自动高度，支持输入图片'
+s.homepage = 'https://github.com/WZBbiao/UITextView-WZB'
+s.license = 'MIT'
+s.platform = 'ios'
+s.author = {'wzbbiao' => '15515898562@163.com'}
+s.ios.deployment_target = '8.0'
+s.source = {:git => 'https://github.com/WZBbiao/UITextView-WZB.git', : tag => s.version}
+s.source_files = 'UITextView-WZB/*.{h,m}'
+s.resources = 'UITextView-WZB/resource/*.{png,xib,nib,boundle}'
+s.requires_arc = true
+s.frameworks = 'UIKit'
+end
