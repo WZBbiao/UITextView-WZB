@@ -24,28 +24,62 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
 
 @implementation UITextView (WZB)
 
+#pragma mark - Swizzle Dealloc
+
++ (void)load {
+    // 交换dealoc
+    Method dealoc = class_getInstanceMethod(self.class, NSSelectorFromString(@"dealloc"));
+    Method myDealoc = class_getInstanceMethod(self.class, @selector(myDealoc));
+    method_exchangeImplementations(dealoc, myDealoc);
+}
+
+- (void)myDealoc {
+    // 移除监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
+    
+    // 如果有值才去调用，这步很重要
+    if (placeholderView) {
+        NSArray *propertys = @[@"frame", @"bounds", @"font", @"text", @"textAlignment", @"textContainerInset"];
+        for (NSString *property in propertys) {
+            [self removeObserver:self forKeyPath:property];
+        }
+    }
+    [self myDealoc];
+}
+
 - (UITextView *)placeholderView {
+    
     // 为了让占位文字和textView的实际文字位置能够完全一致，这里用UITextView
     UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
+    
     if (!placeholderView) {
+        
         placeholderView = [[UITextView alloc] init];
+        
         // 动态添加属性的本质是: 让对象的某个属性与值产生关联
         objc_setAssociatedObject(self, WZBPlaceholderViewKey, placeholderView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         placeholderView = placeholderView;
+        
         // 设置基本属性
         self.scrollEnabled = placeholderView.scrollEnabled = placeholderView.showsHorizontalScrollIndicator = placeholderView.showsVerticalScrollIndicator = placeholderView.userInteractionEnabled = NO;
         placeholderView.textColor = [UIColor lightGrayColor];
         placeholderView.backgroundColor = [UIColor clearColor];
         [self refreshPlaceholderView];
         [self addSubview:placeholderView];
+        
         // 监听文字改变
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextChange) name:UITextViewTextDidChangeNotification object:self];
+        
         // 这些属性改变时，都要作出一定的改变，尽管已经监听了TextDidChange的通知，也要监听text属性，因为通知监听不到setText：
         NSArray *propertys = @[@"frame", @"bounds", @"font", @"text", @"textAlignment", @"textContainerInset"];
+        
         // 监听属性
         for (NSString *property in propertys) {
             [self addObserver:self forKeyPath:property options:NSKeyValueObservingOptionNew context:nil];
         }
+        
     }
     return placeholderView;
 }
@@ -80,12 +114,8 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
 
 - (NSString *)placeholder
 {
-    // 获取对应属性的值
-    
-    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
-    
     // 如果有placeholder值才去调用，这步很重要
-    if (placeholderView) {
+    if (self.placeholderExist) {
         return [self placeholderView].text;
     }
     return nil;
@@ -93,15 +123,14 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
 
 - (void)setPlaceholderColor:(UIColor *)placeholderColor
 {
-    // 动态添加属性的本质是: 让对象的某个属性与值产生关联
-    objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
-    
     // 如果有placeholder值才去调用，这步很重要
-    if (placeholderView) {
+    if (self.placeholderExist) {
         NSLog(@"请先设置placeholder值！");
     } else {
         self.placeholderView.textColor = placeholderColor;
+        
+        // 动态添加属性的本质是: 让对象的某个属性与值产生关联
+        objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
 }
 
@@ -110,7 +139,15 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
 }
 
 - (void)setMaxHeight:(CGFloat)maxHeight {
-    objc_setAssociatedObject(self, WZBTextViewMaxHeightKey, [NSString stringWithFormat:@"%lf", maxHeight], OBJC_ASSOCIATION_COPY_NONATOMIC);
+    
+    CGFloat max = maxHeight;
+    
+    // 如果传入的最大高度小于textView本身的高度，则让最大高度等于本身高度
+    if (maxHeight < self.frame.size.height) {
+        max = self.frame.size.height;
+    }
+    
+    objc_setAssociatedObject(self, WZBTextViewMaxHeightKey, [NSString stringWithFormat:@"%lf", max], OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (CGFloat)maxHeight {
@@ -160,6 +197,20 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
     self.textViewHeightDidChanged = textViewHeightDidChanged;
 }
 
+// 判断是否有placeholder值，这步很重要
+- (BOOL)placeholderExist {
+    
+    // 获取对应属性的值
+    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
+    
+    // 如果有placeholder值
+    if (placeholderView) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (void)addImage:(UIImage *)image {
     [self addImage:image size:CGSizeZero];
 }
@@ -205,21 +256,6 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
     [self textViewTextChange];
     [self refreshPlaceholderView];
     
-}
-
-- (void)dealloc {
-    // 移除监听
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
-    
-    // 如果有值才去调用，这步很重要
-    if (placeholderView) {
-        NSArray *propertys = @[@"frame", @"bounds", @"font", @"text", @"textAlignment", @"textContainerInset"];
-        for (NSString *property in propertys) {
-            [self removeObserver:self forKeyPath:property];
-        }
-    }
 }
 
 @end

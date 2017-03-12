@@ -528,6 +528,7 @@
 				986FE9C71DD9AB190091617F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		986FE9C81DD9AB190091617F /* Build configuration list for PBXNativeTarget "WZBTextView-demoTests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +537,7 @@
 				986FE9CA1DD9AB190091617F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		986FE9CB1DD9AB190091617F /* Build configuration list for PBXNativeTarget "WZBTextView-demoUITests" */ = {
 			isa = XCConfigurationList;
@@ -544,6 +546,7 @@
 				986FE9CD1DD9AB190091617F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
