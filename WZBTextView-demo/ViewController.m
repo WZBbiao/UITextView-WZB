@@ -27,6 +27,7 @@
     self.textView.hidden = NO;
     self.textView.placeholder = @"i love you";
     self.textView.maxHeight = 100.05;
+    self.textView.placeholderColor = [UIColor redColor];
     
 }
 
