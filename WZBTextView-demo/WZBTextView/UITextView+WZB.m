@@ -17,15 +17,19 @@ static const void *WZBPlaceholderColorKey = &WZBPlaceholderColorKey;
 static const void *WZBTextViewMaxHeightKey = &WZBTextViewMaxHeightKey;
 // 高度变化的block
 static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidChangedBlockKey;
+// 存储添加的图片
+static const void *WZBTextViewImageArrayKey = &WZBTextViewImageArrayKey;
 
 @interface UITextView ()
+
+// 存储添加的图片
+@property (nonatomic, strong) NSMutableArray *imageArray;
 
 @end
 
 @implementation UITextView (WZB)
 
 #pragma mark - Swizzle Dealloc
-
 + (void)load {
     // 交换dealoc
     Method dealoc = class_getInstanceMethod(self.class, NSSelectorFromString(@"dealloc"));
@@ -43,12 +47,15 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
     if (placeholderView) {
         NSArray *propertys = @[@"frame", @"bounds", @"font", @"text", @"textAlignment", @"textContainerInset"];
         for (NSString *property in propertys) {
-            [self removeObserver:self forKeyPath:property];
+            @try {
+                [self removeObserver:self forKeyPath:property];
+            } @catch (NSException *exception) {}
         }
     }
     [self myDealoc];
 }
 
+#pragma mark - set && get
 - (UITextView *)placeholderView {
     
     // 为了让占位文字和textView的实际文字位置能够完全一致，这里用UITextView
@@ -56,8 +63,10 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
     
     if (!placeholderView) {
         
-        placeholderView = [[UITextView alloc] init];
+        // 初始化数组
+        self.imageArray = [NSMutableArray array];
         
+        placeholderView = [[UITextView alloc] init];
         // 动态添加属性的本质是: 让对象的某个属性与值产生关联
         objc_setAssociatedObject(self, WZBPlaceholderViewKey, placeholderView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         placeholderView = placeholderView;
@@ -84,28 +93,6 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
     return placeholderView;
 }
 
-- (void)refreshPlaceholderView {
-    
-    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
-    
-    // 如果有值才去调用，这步很重要
-    if (placeholderView) {
-        self.placeholderView.frame = self.bounds;
-        self.placeholderView.font = self.font;
-        self.placeholderView.textAlignment = self.textAlignment;
-        self.placeholderView.textContainerInset = self.textContainerInset;
-    }
-}
-
-#pragma mark - KVO监听属性改变
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [self refreshPlaceholderView];
-    if ([keyPath isEqualToString:@"text"]) {
-        [self textViewTextChange];
-    }
-}
-
-#pragma mark - set && get
 - (void)setPlaceholder:(NSString *)placeholder
 {
     // 为placeholder赋值
@@ -161,6 +148,37 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
 - (textViewHeightDidChangedBlock)textViewHeightDidChanged {
     void(^textViewHeightDidChanged)(CGFloat currentHeight) = objc_getAssociatedObject(self, WZBTextViewHeightDidChangedBlockKey);
     return textViewHeightDidChanged;
+}
+
+- (void)setImageArray:(NSMutableArray *)imageArray {
+    objc_setAssociatedObject(self, WZBTextViewImageArrayKey, imageArray, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableArray *)imageArray {
+    return objc_getAssociatedObject(self, WZBTextViewImageArrayKey);
+}
+
+- (NSArray *)getImages {
+    return self.imageArray;
+}
+
+#pragma mark - KVO监听属性改变
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [self refreshPlaceholderView];
+    if ([keyPath isEqualToString:@"text"]) [self textViewTextChange];
+}
+
+- (void)refreshPlaceholderView {
+    
+    UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
+    
+    // 如果有值才去调用，这步很重要
+    if (placeholderView) {
+        self.placeholderView.frame = self.bounds;
+        self.placeholderView.font = self.font;
+        self.placeholderView.textAlignment = self.textAlignment;
+        self.placeholderView.textContainerInset = self.textContainerInset;
+    }
 }
 
 - (void)textViewTextChange {
@@ -234,6 +252,7 @@ static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidCh
 }
 
 - (void)addImage:(UIImage *)image size:(CGSize)size index:(NSInteger)index multiple:(CGFloat)multiple {
+    if (image) [self.imageArray addObject:image];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
     NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
     textAttachment.image = image;
