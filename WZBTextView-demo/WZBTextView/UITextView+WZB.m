@@ -15,6 +15,8 @@ static const void *WZBPlaceholderViewKey = &WZBPlaceholderViewKey;
 static const void *WZBPlaceholderColorKey = &WZBPlaceholderColorKey;
 // 最大高度
 static const void *WZBTextViewMaxHeightKey = &WZBTextViewMaxHeightKey;
+// 最小高度
+static const void *WZBTextViewMinHeightKey = &WZBTextViewMinHeightKey;
 // 高度变化的block
 static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidChangedBlockKey;
 // 存储添加的图片
@@ -145,6 +147,14 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
     return [objc_getAssociatedObject(self, WZBTextViewMaxHeightKey) doubleValue];
 }
 
+- (void)setMinHeight:(CGFloat)minHeight {
+    objc_setAssociatedObject(self, WZBTextViewMinHeightKey, [NSString stringWithFormat:@"%lf", minHeight], OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (CGFloat)minHeight {
+    return [objc_getAssociatedObject(self, WZBTextViewMinHeightKey) doubleValue];
+}
+
 - (void)setLastHeight:(CGFloat)lastHeight {
     objc_setAssociatedObject(self, WZBTextViewLastHeightKey, [NSString stringWithFormat:@"%lf", lastHeight], OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
@@ -212,13 +222,15 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
             self.scrollEnabled = currentHeight >= self.maxHeight;
             CGFloat currentTextViewHeight = currentHeight >= self.maxHeight ? self.maxHeight : currentHeight;
             // 改变textView的高度
-            CGRect frame = self.frame;
-            frame.size.height = currentTextViewHeight;
-            self.frame = frame;
-            // 调用block
-            if (self.textViewHeightDidChanged) self.textViewHeightDidChanged(currentTextViewHeight);
-            // 记录当前高度
-            self.lastHeight = currentTextViewHeight;
+            if (currentTextViewHeight >= self.minHeight) {
+                CGRect frame = self.frame;
+                frame.size.height = currentTextViewHeight;
+                self.frame = frame;
+                // 调用block
+                if (self.textViewHeightDidChanged) self.textViewHeightDidChanged(currentTextViewHeight);
+                // 记录当前高度
+                self.lastHeight = currentTextViewHeight;
+            }
         }
     }
     
@@ -241,9 +253,7 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
     UITextView *placeholderView = objc_getAssociatedObject(self, WZBPlaceholderViewKey);
     
     // 如果有placeholder值
-    if (placeholderView) {
-        return YES;
-    }
+    if (placeholderView) return YES;
     
     return NO;
 }
