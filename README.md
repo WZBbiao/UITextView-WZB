@@ -17,7 +17,19 @@
 
  #####2、使用方法：
  
+1)、手动添加
+
 将UITextView+WZB.h和UITextView+WZB.m拖入工程
+
+
+2)、CocoaPods添加
+
+在你的podfile文件中添加
+>>> pod 'UITextView-WZB'
+
+然后执行
+>>> pod install
+
 
 只需要在需要使用的地方直接导入头文件UITextView+WZB.h，你的UITextView就拥有了这三大功能
 
