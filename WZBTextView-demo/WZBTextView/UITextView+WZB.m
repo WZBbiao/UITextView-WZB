@@ -19,11 +19,15 @@ static const void *WZBTextViewMaxHeightKey = &WZBTextViewMaxHeightKey;
 static const void *WZBTextViewHeightDidChangedBlockKey = &WZBTextViewHeightDidChangedBlockKey;
 // 存储添加的图片
 static const void *WZBTextViewImageArrayKey = &WZBTextViewImageArrayKey;
+// 存储最后一次改变高度后的值
+static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
 
 @interface UITextView ()
 
 // 存储添加的图片
 @property (nonatomic, strong) NSMutableArray *imageArray;
+// 存储最后一次改变高度后的值
+@property (nonatomic, assign) CGFloat lastHeight;
 
 @end
 
@@ -141,6 +145,14 @@ static const void *WZBTextViewImageArrayKey = &WZBTextViewImageArrayKey;
     return [objc_getAssociatedObject(self, WZBTextViewMaxHeightKey) doubleValue];
 }
 
+- (void)setLastHeight:(CGFloat)lastHeight {
+    objc_setAssociatedObject(self, WZBTextViewLastHeightKey, [NSString stringWithFormat:@"%lf", lastHeight], OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (CGFloat)lastHeight {
+    return [objc_getAssociatedObject(self, WZBTextViewLastHeightKey) doubleValue];
+}
+
 - (void)setTextViewHeightDidChanged:(textViewHeightDidChangedBlock)textViewHeightDidChanged {
     objc_setAssociatedObject(self, WZBTextViewHeightDidChangedBlockKey, textViewHeightDidChanged, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
@@ -193,25 +205,24 @@ static const void *WZBTextViewImageArrayKey = &WZBTextViewImageArrayKey;
         
         // 计算高度
         NSInteger currentHeight = ceil([self sizeThatFits:CGSizeMake(self.bounds.size.width, MAXFLOAT)].height);
-        NSInteger lastheight = ceil(self.maxHeight + self.textContainerInset.top + self.textContainerInset.bottom);
         
         // 如果高度有变化，调用block
-        if (currentHeight != lastheight) {
-            
+        if (currentHeight != self.lastHeight) {
+            // 是否可以滚动
             self.scrollEnabled = currentHeight >= self.maxHeight;
             CGFloat currentTextViewHeight = currentHeight >= self.maxHeight ? self.maxHeight : currentHeight;
+            // 改变textView的高度
             CGRect frame = self.frame;
             frame.size.height = currentTextViewHeight;
             self.frame = frame;
-            if (self.textViewHeightDidChanged) {
-                self.textViewHeightDidChanged(currentTextViewHeight);
-            }
+            // 调用block
+            if (self.textViewHeightDidChanged) self.textViewHeightDidChanged(currentTextViewHeight);
+            // 记录当前高度
+            self.lastHeight = currentTextViewHeight;
         }
     }
     
-    if (!self.isFirstResponder) {
-        [self becomeFirstResponder];
-    }
+    if (!self.isFirstResponder) [self becomeFirstResponder];
 }
 
 - (void)autoHeightWithMaxHeight:(CGFloat)maxHeight {
