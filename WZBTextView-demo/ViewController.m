@@ -42,15 +42,17 @@
     textView.layer.borderWidth = 1;
     
     // 避免循环引用
-    __weak typeof (self) weakSelf = self;
-    __weak typeof (textView) weakTextView = textView;
+//    __weak typeof (self) weakSelf = self;
+//    __weak typeof (textView) weakTextView = textView;
+    
+    // 最大高度为100，监听高度改变的block
     [textView autoHeightWithMaxHeight:100 textViewHeightDidChanged:^(CGFloat currentTextViewHeight) {
-        CGRect frame = weakTextView.frame;
-        frame.size.height = currentTextViewHeight;
-        [UIView animateWithDuration:0.2 animations:^{
-            weakTextView.frame = frame;
-            weakTextView.center = weakSelf.view.center;
-        }];
+//        CGRect frame = weakTextView.frame;
+//        frame.size.height = currentTextViewHeight;
+//        [UIView animateWithDuration:0.2 animations:^{
+//            weakTextView.frame = frame;
+//            weakTextView.center = weakSelf.view.center;
+//        }];
     }];
     self.tView = textView;
     UIButton *button = [[UIButton alloc] initWithFrame:(CGRect){20, 30, 100, 25}];

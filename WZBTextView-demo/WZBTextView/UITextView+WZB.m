@@ -199,8 +199,12 @@ static const void *WZBTextViewImageArrayKey = &WZBTextViewImageArrayKey;
         if (currentHeight != lastheight) {
             
             self.scrollEnabled = currentHeight >= self.maxHeight;
+            CGFloat currentTextViewHeight = currentHeight >= self.maxHeight ? self.maxHeight : currentHeight;
+            CGRect frame = self.frame;
+            frame.size.height = currentTextViewHeight;
+            self.frame = frame;
             if (self.textViewHeightDidChanged) {
-                self.textViewHeightDidChanged(currentHeight >= self.maxHeight ? self.maxHeight : currentHeight);
+                self.textViewHeightDidChanged(currentTextViewHeight);
             }
         }
     }
@@ -210,9 +214,13 @@ static const void *WZBTextViewImageArrayKey = &WZBTextViewImageArrayKey;
     }
 }
 
+- (void)autoHeightWithMaxHeight:(CGFloat)maxHeight {
+    [self autoHeightWithMaxHeight:maxHeight textViewHeightDidChanged:nil];
+}
+
 - (void)autoHeightWithMaxHeight:(CGFloat)maxHeight textViewHeightDidChanged:(void(^)(CGFloat currentTextViewHeight))textViewHeightDidChanged {
     self.maxHeight = maxHeight;
-    self.textViewHeightDidChanged = textViewHeightDidChanged;
+    if (textViewHeightDidChanged) self.textViewHeightDidChanged = textViewHeightDidChanged;
 }
 
 // 判断是否有placeholder值，这步很重要
