@@ -1,37 +1,38 @@
 # UITextView-WZB
 一个强大的UITextView分类，三大功能，让系统TextView自带placeholder属性、自动高度、支持输入图片
 
-#####1、效果:
-功能一、让系统TextView自带placeholder属性
+#### 一、效果:
+***
+##### 1、让系统TextView自带placeholder属性
 
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textView.gif?raw=true)
 
-功能二、自动改变高度，类似聊天输入框
+##### 2、自动改变高度，类似聊天输入框
 
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewHeightChange.gif?raw=true)
 
-功能三、支持输入图片
+##### 3、支持输入图片
 
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
 
 
- #####2、使用方法：
- 
-1)、手动添加
+ #### 二、使用方法
+ ***
+#####  1、手动添加
 
-将UITextView+WZB.h和UITextView+WZB.m拖入工程
+直接将UITextView+WZB.h和UITextView+WZB.m拖入工程
 
 
-2)、CocoaPods添加
+#####  2、CocoaPods添加
 
 在你的podfile文件中添加
->>> pod 'UITextView-WZB'
+> pod 'UITextView-WZB'
 
 然后执行
->>> pod install
+> pod install
 
 
-只需要在需要使用的地方直接导入头文件UITextView+WZB.h，你的UITextView就拥有了这三大功能
+*只需要在需要使用的地方直接导入头文件UITextView+WZB.h，你的UITextView就拥有了这三大功能*
 
 ```
 // 直接设置placeholder属性即可
@@ -55,7 +56,7 @@
 
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewHeightChange.gif?raw=true)
 
->插入图片的方法如下：
+#####  插入图片的方法如下：
 
 ```
 
@@ -77,9 +78,9 @@
 
 ![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
 
- #####3、实现大致原理：
-
->使用runtime为textView添加如下属性
+ #### 三、实现大致原理：
+***
+#####  1、使用runtime为textView添加如下属性
 
 ```
 
@@ -99,7 +100,7 @@ objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_AS
 
 ```
 
->监听
+#####  2、监听
 
 ```
 
@@ -114,7 +115,7 @@ objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_AS
     
 ```
 
->当文字发生变化的时候
+#####  3、当文字发生变化的时候
 
 ```
 
@@ -137,7 +138,7 @@ objc_setAssociatedObject(self, WZBPlaceholderColorKey, placeholderColor, OBJC_AS
 
 ```
 
->添加图片是用的NSTextAttachment
+#####  4、添加图片是用的NSTextAttachment
 
 ```
 
