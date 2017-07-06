@@ -242,6 +242,7 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
 }
 
 - (void)autoHeightWithMaxHeight:(CGFloat)maxHeight textViewHeightDidChanged:(void(^)(CGFloat currentTextViewHeight))textViewHeightDidChanged {
+    [self placeholderView];
     self.maxHeight = maxHeight;
     if (textViewHeightDidChanged) self.textViewHeightDidChanged = textViewHeightDidChanged;
 }

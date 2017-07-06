@@ -20,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self test1];
+    [self test2];
 }
 
 - (void)test1 {
@@ -37,7 +37,7 @@
     UITextView *textView = [[UITextView alloc] initWithFrame:(CGRect){0, 0, 200, 30}];
     [self.view addSubview:textView];
     textView.center = self.view.center;
-    textView.placeholder = @"i love you";
+//    textView.placeholder = @"i love you";
     textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     textView.layer.borderWidth = 1;
     
