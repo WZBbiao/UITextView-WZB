@@ -20,15 +20,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self test2];
+    [self test1];
 }
 
 - (void)test1 {
     self.textView.hidden = NO;
-    self.textView.placeholder = @"i love you";
-    self.textView.maxHeight = 100.05;
-    self.textView.placeholderColor = [UIColor redColor];
-    
+    self.textView.wzb_placeholder = @"i love you";
+    self.textView.wzb_maxHeight = 100.05;
+    self.textView.wzb_placeholderColor = [UIColor redColor];
 }
 
 - (void)test2 {
@@ -46,7 +45,7 @@
 //    __weak typeof (textView) weakTextView = textView;
     
     // 最大高度为100，监听高度改变的block
-    [textView autoHeightWithMaxHeight:100 textViewHeightDidChanged:^(CGFloat currentTextViewHeight) {
+    [textView wzb_autoHeightWithMaxHeight:100 textViewHeightDidChanged:^(CGFloat currentTextViewHeight) {
 //        CGRect frame = weakTextView.frame;
 //        frame.size.height = currentTextViewHeight;
 //        [UIView animateWithDuration:0.2 animations:^{
@@ -92,7 +91,7 @@
             theImage = [info objectForKey:UIImagePickerControllerOriginalImage];
         }
         if (theImage) {
-            [self.tView addImage:theImage];
+            [self.tView wzb_addImage:theImage];
         }
     }
     [picker dismissViewControllerAnimated:YES completion:nil];
