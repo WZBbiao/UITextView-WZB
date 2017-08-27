@@ -78,7 +78,8 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
         placeholderView = placeholderView;
         
         // 设置基本属性
-        self.scrollEnabled = placeholderView.scrollEnabled = placeholderView.showsHorizontalScrollIndicator = placeholderView.showsVerticalScrollIndicator = placeholderView.userInteractionEnabled = NO;
+        placeholderView.scrollEnabled = placeholderView.userInteractionEnabled = NO;
+//        self.scrollEnabled = placeholderView.scrollEnabled = placeholderView.showsHorizontalScrollIndicator = placeholderView.showsVerticalScrollIndicator = placeholderView.userInteractionEnabled = NO;
         placeholderView.textColor = [UIColor lightGrayColor];
         placeholderView.backgroundColor = [UIColor clearColor];
         [self refreshPlaceholderView];
@@ -275,6 +276,7 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
     // 如果有值才去调用，这步很重要
     if (placeholderView) {
         self.wzb_placeholderView.frame = self.bounds;
+        if (self.wzb_maxHeight < self.bounds.size.height) self.wzb_maxHeight = self.bounds.size.height;
         self.wzb_placeholderView.font = self.font;
         self.wzb_placeholderView.textAlignment = self.textAlignment;
         self.wzb_placeholderView.textContainerInset = self.textContainerInset;
