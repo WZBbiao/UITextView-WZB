@@ -16,6 +16,7 @@
 		986FE9B61DD9AB190091617F /* WZBTextView_demoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 986FE9B51DD9AB190091617F /* WZBTextView_demoTests.m */; };
 		986FE9C11DD9AB190091617F /* WZBTextView_demoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 986FE9C01DD9AB190091617F /* WZBTextView_demoUITests.m */; };
 		986FE9D11DD9AB440091617F /* UITextView+WZB.m in Sources */ = {isa = PBXBuildFile; fileRef = 986FE9D01DD9AB440091617F /* UITextView+WZB.m */; };
+		D0DE32AF1F52916200A3FDA8 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0DE32AE1F52916200A3FDA8 /* DemoViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		986FE9C21DD9AB190091617F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		986FE9CF1DD9AB440091617F /* UITextView+WZB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+WZB.h"; sourceTree = "<group>"; };
 		986FE9D01DD9AB440091617F /* UITextView+WZB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+WZB.m"; sourceTree = "<group>"; };
+		D0DE32AD1F52916200A3FDA8 /* DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
+		D0DE32AE1F52916200A3FDA8 /* DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 				986FE99F1DD9AB190091617F /* AppDelegate.m */,
 				986FE9A11DD9AB190091617F /* ViewController.h */,
 				986FE9A21DD9AB190091617F /* ViewController.m */,
+				D0DE32AD1F52916200A3FDA8 /* DemoViewController.h */,
+				D0DE32AE1F52916200A3FDA8 /* DemoViewController.m */,
 				986FE9A41DD9AB190091617F /* Main.storyboard */,
 				986FE9A71DD9AB190091617F /* Assets.xcassets */,
 				986FE9A91DD9AB190091617F /* LaunchScreen.storyboard */,
@@ -292,6 +297,7 @@
 				986FE9A31DD9AB190091617F /* ViewController.m in Sources */,
 				986FE9A01DD9AB190091617F /* AppDelegate.m in Sources */,
 				986FE99D1DD9AB190091617F /* main.m in Sources */,
+				D0DE32AF1F52916200A3FDA8 /* DemoViewController.m in Sources */,
 				986FE9D11DD9AB440091617F /* UITextView+WZB.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

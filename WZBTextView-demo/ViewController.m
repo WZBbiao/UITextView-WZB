@@ -7,11 +7,10 @@
 //
 
 #import "ViewController.h"
-#import <MobileCoreServices/MobileCoreServices.h>
+#import "DemoViewController.h"
 
-@interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
-@property (weak, nonatomic) IBOutlet UITextView *textView;
-@property (nonatomic, strong) UITextView *tView;
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -19,82 +18,48 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self test1];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.title = @"UITextView-WZB";
+    [self.view addSubview:self.tableView];
 }
 
-- (void)test1 {
-    self.textView.hidden = NO;
-    self.textView.wzb_placeholder = @"i love you";
-    self.textView.wzb_maxHeight = 100.05;
-    self.textView.wzb_placeholderColor = [UIColor redColor];
-}
-
-- (void)test2 {
-    self.textView.hidden = YES;
-    
-    UITextView *textView = [[UITextView alloc] initWithFrame:(CGRect){0, 0, 200, 30}];
-    [self.view addSubview:textView];
-    textView.center = self.view.center;
-//    textView.placeholder = @"i love you";
-    textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    textView.layer.borderWidth = 1;
-    
-    // 避免循环引用
-//    __weak typeof (self) weakSelf = self;
-//    __weak typeof (textView) weakTextView = textView;
-    
-    // 最大高度为100，监听高度改变的block
-    [textView wzb_autoHeightWithMaxHeight:100 textViewHeightDidChanged:^(CGFloat currentTextViewHeight) {
-//        CGRect frame = weakTextView.frame;
-//        frame.size.height = currentTextViewHeight;
-//        [UIView animateWithDuration:0.2 animations:^{
-//            weakTextView.frame = frame;
-//            weakTextView.center = weakSelf.view.center;
-//        }];
-    }];
-    self.tView = textView;
-    UIButton *button = [[UIButton alloc] initWithFrame:(CGRect){20, 30, 100, 25}];
-    [self.view addSubview:button];
-    [button setTitle:@"添加图片" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(addImage) forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.textView resignFirstResponder];
-}
-
-- (void)addImage {
-    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary] || [UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeSavedPhotosAlbum]) {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        
-        picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeImage,nil];
-        
-        picker.delegate = self;
-        
-        [self presentViewController:picker animated:YES completion:nil];
-    } else {
-        NSLog(@"设备不支持相册或者图库");
+#pragma mark - lazy
+- (UITableView *)tableView
+{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
     }
+    return _tableView;
 }
 
-// 当得到照片后，调用该方法
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-    if ([mediaType isEqualToString:(NSString *)kUTTypeImage]){
-        UIImage *theImage = nil;
-        if ([picker allowsEditing]){
-            theImage = [info objectForKey:UIImagePickerControllerEditedImage];
-        } else {
-            theImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-        }
-        if (theImage) {
-            [self.tView wzb_addImage:theImage];
-        }
+#pragma mark - UITableViewDelegate&&UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.dataSource.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellId = @"cellId";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    cell.textLabel.text = self.dataSource[indexPath.row];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    DemoViewController *vc = [[DemoViewController alloc] initWithTitle:self.dataSource[indexPath.row] type:indexPath.row];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (NSArray *)dataSource
+{
+    return @[@"占位符", @"自动高度", @"添加图片"];
 }
 
 @end
