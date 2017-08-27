@@ -196,9 +196,11 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
 {
     [self wzb_autoHeightWithMaxHeight:maxHeight textViewHeightDidChanged:nil];
 }
-
+// 是否启用自动高度，默认为NO
+static bool autoHeight = NO;
 - (void)wzb_autoHeightWithMaxHeight:(CGFloat)maxHeight textViewHeightDidChanged:(textViewHeightDidChangedBlock)textViewHeightDidChanged
 {
+    autoHeight = YES;
     [self wzb_placeholderView];
     self.wzb_maxHeight = maxHeight;
     if (textViewHeightDidChanged) self.wzb_textViewHeightDidChanged = textViewHeightDidChanged;
@@ -291,7 +293,8 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
     if (placeholderView) {
         self.wzb_placeholderView.hidden = (self.text.length > 0 && self.text);
     }
-    
+    // 如果没有启用自动高度，不执行以下方法
+    if (!autoHeight) return;
     if (self.wzb_maxHeight >= self.bounds.size.height) {
         
         // 计算高度
