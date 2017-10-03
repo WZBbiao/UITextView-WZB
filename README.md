@@ -5,15 +5,15 @@
 ***
 ##### 1、让系统TextView自带placeholder属性
 
-![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textView.gif?raw=true)
+![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/gif/UITextView-WZB-gif1.gif?raw=true)
 
 ##### 2、自动改变高度，类似聊天输入框
 
-![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewHeightChange.gif?raw=true)
+![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/gif/UITextView-WZB-gif2.gif?raw=true)
 
 ##### 3、支持输入图片
 
-![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
+![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/gif/UITextView-WZB-gif3.gif?raw=true)
 
 
  #### 二、使用方法
@@ -41,8 +41,6 @@
     
 ```
 
-![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textView-demo-1.png?raw=true)
-
 >如果想要计算高度，只需要调用这个方法即可，你需要在block回调里手动更改textView的高度
 
 ```
@@ -52,9 +50,6 @@
 
 ```
 
-如图
-
-![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewHeightChange.gif?raw=true)
 
 #####  插入图片的方法如下：
 
@@ -73,10 +68,6 @@
 - (void)insertImage:(UIImage *)image multiple:(CGFloat)multiple index:(NSInteger)index;
 
 ```
-
-注释写的很清楚，效果如下：
-
-![image](https://github.com/WZBbiao/UITextView-WZB/blob/master/textViewAddImage.gif?raw=true)
 
  #### 三、实现大致原理：
 ***
