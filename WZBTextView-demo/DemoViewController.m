@@ -10,6 +10,8 @@
 #import "UITextView+WZB.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
+#define kNavigationBarH self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height
+
 @interface DemoViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (strong, nonatomic) UITextView *textView;
@@ -49,7 +51,7 @@
 }
 
 - (void)test1 {
-    self.textView.frame = CGRectMake(0, 64, self.view.bounds.size.width, self.view.bounds.size.height - 64);
+    self.textView.frame = CGRectMake(0, kNavigationBarH, self.view.bounds.size.width, self.view.bounds.size.height - 64);
     // 设置placeholder
     self.textView.wzb_placeholder = @"请输入文字";
 //    self.textView.wzb_maxHeight = 100.05;
@@ -85,7 +87,7 @@
 
 - (void)test3
 {
-    self.textView.frame = CGRectMake(0, 64, self.view.bounds.size.width, self.view.bounds.size.height - 64);
+    self.textView.frame = CGRectMake(0, kNavigationBarH, self.view.bounds.size.width, self.view.bounds.size.height - 64);
     self.textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.textView.layer.borderWidth = 1;
     self.textView.wzb_placeholder = @"点击右上角按钮添加图片";

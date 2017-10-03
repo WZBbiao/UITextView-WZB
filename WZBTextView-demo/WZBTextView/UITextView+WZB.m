@@ -39,11 +39,11 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
 + (void)load {
     // 交换dealoc
     Method dealoc = class_getInstanceMethod(self.class, NSSelectorFromString(@"dealloc"));
-    Method myDealoc = class_getInstanceMethod(self.class, @selector(myDealoc));
-    method_exchangeImplementations(dealoc, myDealoc);
+    Method myDealloc = class_getInstanceMethod(self.class, @selector(myDealloc));
+    method_exchangeImplementations(dealoc, myDealloc);
 }
 
-- (void)myDealoc {
+- (void)myDealloc {
     // 移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
@@ -58,7 +58,7 @@ static const void *WZBTextViewLastHeightKey = &WZBTextViewLastHeightKey;
             } @catch (NSException *exception) {}
         }
     }
-    [self myDealoc];
+    [self myDealloc];
 }
 
 #pragma mark - set && get
