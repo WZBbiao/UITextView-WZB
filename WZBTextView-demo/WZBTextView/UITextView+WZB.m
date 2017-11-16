@@ -282,6 +282,7 @@ static bool autoHeight = NO;
         self.wzb_placeholderView.font = self.font;
         self.wzb_placeholderView.textAlignment = self.textAlignment;
         self.wzb_placeholderView.textContainerInset = self.textContainerInset;
+        self.wzb_placeholderView.hidden = (self.text.length > 0 && self.text);
     }
 }
 
