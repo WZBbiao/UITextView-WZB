@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name         = "UITextView-WZB"
 
-  s.version      = "1.1.0"
+  s.version      = "1.1.1"
 
   s.summary      = "Three big functions for system UITextView."
 
