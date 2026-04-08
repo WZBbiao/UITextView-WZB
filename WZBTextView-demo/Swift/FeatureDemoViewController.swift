@@ -54,7 +54,7 @@ final class FeatureDemoViewController: UIViewController, UIImagePickerController
             NSLayoutConstraint.activate([
                 textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                textView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12)
+                textView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
             ])
             textView.placeholder = "继续输入，输入框会自动增高。"
             textView.minHeight = 44
