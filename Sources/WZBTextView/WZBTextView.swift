@@ -27,6 +27,12 @@ open class WZBTextView: UITextView {
         }
     }
 
+    public var maxLength: Int = 0 {
+        didSet {
+            enforceMaxLengthIfNeeded()
+        }
+    }
+
     public var onHeightChange: ((CGFloat) -> Void)?
 
     public override var text: String! {
@@ -83,6 +89,7 @@ open class WZBTextView: UITextView {
     private var lastReportedHeight: CGFloat?
     private var insertedImages: [UIImage] = []
     private var textDidChangeObserver: NSObjectProtocol?
+    private var isEnforcingMaxLength = false
 
     public override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -152,6 +159,7 @@ open class WZBTextView: UITextView {
             object: self,
             queue: .main
         ) { [weak self] _ in
+            self?.enforceMaxLengthIfNeeded()
             self?.updatePlaceholderVisibility()
             self?.recalculateHeightIfNeeded()
         }
@@ -177,6 +185,30 @@ open class WZBTextView: UITextView {
 
     private func updatePlaceholderVisibility() {
         placeholderLabel.isHidden = !(attributedText?.string.isEmpty ?? true)
+    }
+
+    private func enforceMaxLengthIfNeeded() {
+        guard maxLength > 0, !isEnforcingMaxLength else { return }
+        let currentLength = attributedText?.string.count ?? 0
+        guard currentLength > maxLength else { return }
+
+        isEnforcingMaxLength = true
+        defer { isEnforcingMaxLength = false }
+
+        let limitedText = limitedAttributedText(maxLength: maxLength)
+        let previousSelection = selectedRange.location
+        attributedText = limitedText
+        selectedRange = NSRange(location: min(previousSelection, limitedText.length), length: 0)
+    }
+
+    private func limitedAttributedText(maxLength: Int) -> NSAttributedString {
+        let source = attributedText ?? NSAttributedString()
+        let string = source.string
+        guard string.count > maxLength else { return source }
+
+        let endIndex = string.index(string.startIndex, offsetBy: maxLength)
+        let nsRange = NSRange(string.startIndex..<endIndex, in: string)
+        return source.attributedSubstring(from: nsRange)
     }
 
     private func recalculateHeightIfNeeded() {

@@ -47,4 +47,30 @@ final class WZBTextViewTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(reportedHeights.last ?? 0, 44)
         XCTAssertLessThanOrEqual(reportedHeights.last ?? .greatestFiniteMagnitude, 80)
     }
+
+    func testMaxLengthTrimsPlainText() {
+        let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 44))
+        textView.maxLength = 5
+
+        textView.text = "123456789"
+        NotificationCenter.default.post(name: UITextView.textDidChangeNotification, object: textView)
+
+        XCTAssertEqual(textView.text, "12345")
+    }
+
+    func testMaxLengthTrimsAttributedText() {
+        let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 44))
+        textView.maxLength = 4
+        let attributed = NSAttributedString(
+            string: "abcdef",
+            attributes: [.foregroundColor: UIColor.systemRed]
+        )
+
+        textView.attributedText = attributed
+        NotificationCenter.default.post(name: UITextView.textDidChangeNotification, object: textView)
+
+        XCTAssertEqual(textView.attributedText.string, "abcd")
+        let color = textView.attributedText.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? UIColor
+        XCTAssertEqual(color, .systemRed)
+    }
 }
