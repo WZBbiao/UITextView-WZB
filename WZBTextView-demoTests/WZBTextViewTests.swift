@@ -1,0 +1,50 @@
+import UIKit
+import XCTest
+@testable import WZBTextView_demo
+
+final class WZBTextViewTests: XCTestCase {
+    func testPlaceholderLabelVisibilityTracksContent() throws {
+        let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 44))
+        textView.placeholder = "placeholder"
+        textView.layoutIfNeeded()
+
+        let placeholderLabel = try XCTUnwrap(textView.subviews.compactMap { $0 as? UILabel }.first)
+        XCTAssertFalse(placeholderLabel.isHidden)
+
+        textView.text = "hello"
+        XCTAssertTrue(placeholderLabel.isHidden)
+
+        textView.text = ""
+        XCTAssertFalse(placeholderLabel.isHidden)
+    }
+
+    func testAddImageStoresImageAndAttachment() {
+        let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 44))
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 12)).image { context in
+            UIColor.systemBlue.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 24, height: 12))
+        }
+
+        textView.addImage(image)
+
+        XCTAssertEqual(textView.images().count, 1)
+        XCTAssertEqual(textView.attributedText.length, 1)
+        XCTAssertTrue(textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) is NSTextAttachment)
+    }
+
+    func testAutoHeightReportsClampedHeight() {
+        let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
+        textView.font = .systemFont(ofSize: 17)
+        textView.minHeight = 44
+
+        var reportedHeights: [CGFloat] = []
+        textView.autoHeight(maxHeight: 80) { height in
+            reportedHeights.append(height)
+        }
+        textView.text = Array(repeating: "Swift rewrite", count: 30).joined(separator: " ")
+
+        XCTAssertFalse(reportedHeights.isEmpty)
+        XCTAssertGreaterThanOrEqual(reportedHeights.last ?? 0, 44)
+        XCTAssertLessThanOrEqual(reportedHeights.last ?? .greatestFiniteMagnitude, 80)
+    }
+}
