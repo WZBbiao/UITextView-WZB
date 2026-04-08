@@ -44,7 +44,7 @@
 ### Swift Package Manager
 
 ```swift
-.package(url: "https://github.com/WZBbiao/UITextView-WZB.git", from: "2.0.0")
+.package(url: "https://github.com/WZBbiao/UITextView-WZB.git", from: "2.0.1")
 ```
 
 然后在 target 里添加 `WZBTextView` 依赖。
@@ -136,7 +136,7 @@ WZBTextView-demoTests/        单元测试
 
 `2.x` 是 Swift 重写版本。
 
-如果你之前使用的是旧的 Objective-C 版，请把 `2.0.0` 视为迁移版本，而不是无感升级版本。
+如果你之前使用的是旧的 Objective-C 版，请把 `2.0.0` 视为迁移版本，而 `2.0.1` 是 Swift 重写后的首个补丁版本。
 
 ## License
 

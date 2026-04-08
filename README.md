@@ -46,7 +46,7 @@ A modern Swift `UITextView` component with three things most apps end up buildin
 Add the package:
 
 ```swift
-.package(url: "https://github.com/WZBbiao/UITextView-WZB.git", from: "2.0.0")
+.package(url: "https://github.com/WZBbiao/UITextView-WZB.git", from: "2.0.1")
 ```
 
 Then add the `WZBTextView` product to your target dependencies.
@@ -138,7 +138,7 @@ WZBTextView-demoTests/        Unit tests
 
 `2.x` is the Swift rewrite.
 
-If you were using the older Objective-C implementation, treat `2.0.0` as a migration point rather than a drop-in update.
+If you were using the older Objective-C implementation, treat `2.0.0` as the migration point and `2.0.1` as the first patch release on top of the Swift rewrite.
 
 ## License
 
