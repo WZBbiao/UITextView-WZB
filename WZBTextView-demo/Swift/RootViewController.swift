@@ -4,6 +4,7 @@ final class RootViewController: UITableViewController {
     enum Demo: Int, CaseIterable {
         case placeholder
         case autoHeight
+        case maxLength
         case attachments
 
         var title: String {
@@ -12,6 +13,8 @@ final class RootViewController: UITableViewController {
                 return "占位符"
             case .autoHeight:
                 return "自动高度"
+            case .maxLength:
+                return "字数限制"
             case .attachments:
                 return "添加图片"
             }
@@ -23,6 +26,8 @@ final class RootViewController: UITableViewController {
                 return "原生 UITextView + placeholder"
             case .autoHeight:
                 return "聊天输入框式高度增长"
+            case .maxLength:
+                return "限制最大输入长度并显示当前计数"
             case .attachments:
                 return "支持把图片插入到文本流里"
             }

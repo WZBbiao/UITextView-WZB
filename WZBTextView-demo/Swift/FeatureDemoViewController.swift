@@ -5,6 +5,7 @@ final class FeatureDemoViewController: UIViewController, UIImagePickerController
 
     private let demo: Demo
     private let textView = WZBTextView()
+    private let helperLabel = UILabel()
     private var textViewHeightConstraint: NSLayoutConstraint?
 
     init(demo: Demo) {
@@ -34,6 +35,10 @@ final class FeatureDemoViewController: UIViewController, UIImagePickerController
         textView.layer.cornerRadius = 16
         textView.textContainerInset = UIEdgeInsets(top: 14, left: 10, bottom: 14, right: 10)
         view.addSubview(textView)
+
+        helperLabel.translatesAutoresizingMaskIntoConstraints = false
+        helperLabel.font = .systemFont(ofSize: 13, weight: .medium)
+        helperLabel.textColor = .secondaryLabel
     }
 
     private func configureDemo() {
@@ -63,6 +68,27 @@ final class FeatureDemoViewController: UIViewController, UIImagePickerController
                 self?.view.layoutIfNeeded()
             }
 
+        case .maxLength:
+            view.addSubview(helperLabel)
+            NSLayoutConstraint.activate([
+                textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
+                textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+                textView.heightAnchor.constraint(equalToConstant: 180),
+                helperLabel.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 10),
+                helperLabel.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
+                helperLabel.leadingAnchor.constraint(greaterThanOrEqualTo: textView.leadingAnchor)
+            ])
+            textView.placeholder = "最多输入 20 个字符，超出后会自动截断。"
+            textView.maxLength = 20
+            helperLabel.text = "0/20"
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(handleTextDidChange),
+                name: UITextView.textDidChangeNotification,
+                object: textView
+            )
+
         case .attachments:
             NSLayoutConstraint.activate([
                 textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -79,6 +105,14 @@ final class FeatureDemoViewController: UIViewController, UIImagePickerController
                 action: #selector(addImage)
             )
         }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func handleTextDidChange() {
+        helperLabel.text = "\(textView.text.count)/\(textView.maxLength)"
     }
 
     @objc private func addImage() {
