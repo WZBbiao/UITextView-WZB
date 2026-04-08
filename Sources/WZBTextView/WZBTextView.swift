@@ -1,5 +1,12 @@
 import UIKit
 
+private func wzbDefaultPlaceholderColor() -> UIColor {
+    if #available(iOS 13.0, *) {
+        return .placeholderText
+    }
+    return UIColor(white: 0.7, alpha: 1)
+}
+
 open class WZBTextView: UITextView {
     public var placeholder: String = "" {
         didSet {
@@ -9,7 +16,7 @@ open class WZBTextView: UITextView {
         }
     }
 
-    public var placeholderColor: UIColor = .placeholderText {
+    public var placeholderColor: UIColor = wzbDefaultPlaceholderColor() {
         didSet {
             placeholderLabel.textColor = placeholderColor
         }

@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage = "https://github.com/WZBbiao/UITextView-WZB"
   s.license = "MIT"
   s.author = { "WZBbiao" => "544856638@qq.com" }
-  s.platform = :ios, "13.0"
+  s.platform = :ios, "11.0"
   s.module_name = "WZBTextView"
   s.swift_version = "5.0"
   s.source = { :git => "https://github.com/WZBbiao/UITextView-WZB.git", :tag => s.version }

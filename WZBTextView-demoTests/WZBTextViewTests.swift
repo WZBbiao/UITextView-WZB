@@ -18,6 +18,29 @@ final class WZBTextViewTests: XCTestCase {
         XCTAssertFalse(placeholderLabel.isHidden)
     }
 
+    func testPlaceholderStaysHiddenWhenTextIsPreset() throws {
+        let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 44))
+        textView.placeholder = "placeholder"
+        textView.text = "prefilled"
+        textView.layoutIfNeeded()
+
+        let placeholderLabel = try XCTUnwrap(textView.subviews.compactMap { $0 as? UILabel }.first)
+        XCTAssertTrue(placeholderLabel.isHidden)
+    }
+
+    func testTextViewCanDeallocateAfterUse() {
+        weak var weakTextView: WZBTextView?
+
+        autoreleasepool {
+            let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 44))
+            textView.placeholder = "placeholder"
+            textView.text = "content"
+            weakTextView = textView
+        }
+
+        XCTAssertNil(weakTextView)
+    }
+
     func testAddImageStoresImageAndAttachment() {
         let textView = WZBTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 44))
         let image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 12)).image { context in

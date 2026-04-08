@@ -35,7 +35,7 @@ A modern Swift `UITextView` component with three things most apps end up buildin
 
 ## Requirements
 
-- iOS 13.0+
+- iOS 11.0+
 - Swift 5
 - Xcode 15+ recommended
 
