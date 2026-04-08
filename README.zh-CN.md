@@ -1,55 +1,53 @@
 # UITextView-WZB
 
-[中文文档](./README.zh-CN.md)
+[English README](./README.md)
 
-A modern Swift `UITextView` component with three things most apps end up building anyway:
+一个更现代的 Swift 版 `UITextView` 组件，主要解决三个高频需求：
 
-- Placeholder support
-- Auto-growing height
-- Inline image attachments
+- 占位符
+- 自动增高
+- 文本内插图
 
-`UITextView-WZB` keeps the API small and UIKit-native while covering the common chat/composer use cases.
+它保持 UIKit 原生使用方式，不强行引入额外层级，适合聊天输入框、评论框、发布框这类场景。
 
-## Features
+## 功能特性
 
-- Built in Swift
-- Works with UIKit directly
-- Supports Swift Package Manager
-- Supports CocoaPods
-- Ships with a demo app
-- Includes unit tests for the core behaviors
+- Swift 实现
+- 原生 UIKit 接入
+- 支持 Swift Package Manager
+- 支持 CocoaPods
+- 自带 Demo 工程
+- 带核心行为单元测试
 
-## Preview
+## 效果
 
-### Placeholder
+### 占位符
 
 ![Placeholder](./gif/UITextView-WZB-gif1.gif)
 
-### Auto Height
+### 自动高度
 
 ![Auto Height](./gif/UITextView-WZB-gif2.gif)
 
-### Inline Images
+### 插入图片
 
 ![Inline Images](./gif/UITextView-WZB-gif3.gif)
 
-## Requirements
+## 环境要求
 
 - iOS 13.0+
 - Swift 5
-- Xcode 15+ recommended
+- 建议使用 Xcode 15+
 
-## Installation
+## 安装
 
 ### Swift Package Manager
-
-Add the package:
 
 ```swift
 .package(url: "https://github.com/WZBbiao/UITextView-WZB.git", from: "2.0.0")
 ```
 
-Then add the `WZBTextView` product to your target dependencies.
+然后在 target 里添加 `WZBTextView` 依赖。
 
 ### CocoaPods
 
@@ -57,7 +55,7 @@ Then add the `WZBTextView` product to your target dependencies.
 pod "UITextView-WZB", "~> 2.0"
 ```
 
-## Quick Start
+## 快速使用
 
 ```swift
 import UIKit
@@ -72,7 +70,7 @@ final class ComposerViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.placeholder = "Write a message..."
+        textView.placeholder = "请输入内容..."
         textView.minHeight = 44
         textView.font = .systemFont(ofSize: 17)
 
@@ -96,7 +94,7 @@ final class ComposerViewController: UIViewController {
 
 ## API
 
-### Properties
+### 属性
 
 ```swift
 public var placeholder: String
@@ -106,7 +104,7 @@ public var maxHeight: CGFloat
 public var onHeightChange: ((CGFloat) -> Void)?
 ```
 
-### Methods
+### 方法
 
 ```swift
 public func autoHeight(maxHeight: CGFloat, onHeightChange: ((CGFloat) -> Void)? = nil)
@@ -118,28 +116,28 @@ public func addImage(_ image: UIImage, multiple: CGFloat)
 public func insertImage(_ image: UIImage, multiple: CGFloat, index: Int)
 ```
 
-## Demo
+## Demo 内容
 
-The demo project includes:
+Demo 里现在包含：
 
-- Placeholder example
-- Centered auto-growing text view example
-- Inline image insertion example
+- 占位符示例
+- 居中自动增高输入框示例
+- 文本内插图示例
 
-## Project Structure
+## 目录结构
 
 ```text
-Sources/WZBTextView/           Library source
-WZBTextView-demo/             Demo app
-WZBTextView-demoTests/        Unit tests
+Sources/WZBTextView/           组件源码
+WZBTextView-demo/             Demo 工程
+WZBTextView-demoTests/        单元测试
 ```
 
-## Versioning
+## 版本说明
 
-`2.x` is the Swift rewrite.
+`2.x` 是 Swift 重写版本。
 
-If you were using the older Objective-C implementation, treat `2.0.0` as a migration point rather than a drop-in update.
+如果你之前使用的是旧的 Objective-C 版，请把 `2.0.0` 视为迁移版本，而不是无感升级版本。
 
 ## License
 
-`UITextView-WZB` is available under the MIT license. See the [LICENSE](./LICENSE) file for details.
+项目使用 MIT 协议，详见 [LICENSE](./LICENSE)。
